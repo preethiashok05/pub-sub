@@ -1,9 +1,6 @@
 ## Frontend Installation
 
-1. Clone the repository:
-
-   ```bash
-   git clone <frontend-repository-url>
+1. Clone the repository
 
 2. npm install
 
