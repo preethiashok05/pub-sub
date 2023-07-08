@@ -17,6 +17,9 @@ import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
+import { AuthContext } from "../../context/AuthContext";
+import {useContext} from 'react';
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -40,6 +43,7 @@ const Sidebar = () => {
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [selected, setSelected] = useState("Dashboard");
+  const { isAdmin } = useContext(AuthContext);
 
   return (
     <Box
@@ -124,6 +128,15 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            {isAdmin && (
+              <Item
+                title="Send Message"
+                to="/sendmsg"
+                icon={<PeopleOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+            )}
 
             <Typography
               variant="h6"
@@ -218,6 +231,7 @@ const Sidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+
           </Box>
         </Menu>
       </ProSidebar>

@@ -1,6 +1,5 @@
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
@@ -13,7 +12,33 @@ import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 
+import { server } from '../../utils/apiRoutes';
+import React , { useState , useEffect} from 'react';
+
 const Dashboard = () => {
+
+  const [data, setdata] = useState([]);
+
+  //Fetch transactions data when the dashboard renders
+  useEffect( () => {
+    var mount = true;
+    if(mount === true)
+    { 
+        const config = {     
+          method: 'GET',
+        }
+        fetch(`${server}/transactions/getdata`,config)
+        .then(res => res.json())
+        .then(data => {
+          setdata(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    return () => {mount = false};
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
@@ -183,7 +208,7 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
-          {mockTransactions.map((transaction, i) => (
+          {data.map((transaction, i) => (
             <Box
               key={`${transaction.txId}-${i}`}
               display="flex"

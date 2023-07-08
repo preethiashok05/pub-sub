@@ -1,9 +1,32 @@
 import { ResponsivePie } from "@nivo/pie";
 import { tokens } from "../theme";
 import { useTheme } from "@mui/material";
-import { mockPieData as data } from "../data/mockData";
+import { server } from '../utils/apiRoutes'
+//import { mockPieData as data } from "../data/mockData";
+import React , { useState , useEffect} from 'react';
 
 const PieChart = () => {
+  const [data, setdata] = useState([]);
+
+  useEffect( () => {
+    var mount = true;
+    if(mount === true)
+    { 
+        const config = {     
+          method: 'GET',
+        }
+        fetch(`${server}/pie/getpie`,config)
+        .then(res => res.json())
+        .then(data => {
+          setdata(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    return () => {mount = false};
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   return (

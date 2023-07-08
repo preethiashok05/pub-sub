@@ -8,11 +8,24 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchIcon from "@mui/icons-material/Search";
+import { AuthContext } from '../../context/AuthContext';
 
 const Topbar = () => {
+  const { isLoggedIn, username , isAdmin, logout } = useContext(AuthContext);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+
+  const handleSignOut = () => {
+    // Implement your sign-out logic here
+    // Clear the stored user information from local storage
+    logout();
+  };
+
+  const handleSignIn = () => {
+    window.location.href = '/signin';
+  };
 
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
@@ -43,9 +56,22 @@ const Topbar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon />
-        </IconButton>
+        {username ? (
+          <>
+            <IconButton sx={{ fontSize: '0.8rem' }}>
+              <PersonOutlinedIcon />
+              {isAdmin ? 'admin' : username}
+            </IconButton>
+            <IconButton sx={{ fontSize: '0.8rem' }} onClick={handleSignOut}>
+              Sign Out
+            </IconButton>
+          </>
+        ) : (
+          <IconButton  sx={{ fontSize: '0.8rem' }} onClick={handleSignIn}> 
+            <PersonOutlinedIcon />
+            Sign In
+          </IconButton>
+        )}
       </Box>
     </Box>
   );

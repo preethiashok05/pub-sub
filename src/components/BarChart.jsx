@@ -1,9 +1,33 @@
 import { useTheme } from "@mui/material";
 import { ResponsiveBar } from "@nivo/bar";
 import { tokens } from "../theme";
-import { mockBarData as data } from "../data/mockData";
+import { server } from '../utils/apiRoutes'
+//import { mockPieData as data } from "../data/mockData";
+import React , { useState , useEffect} from 'react';
 
 const BarChart = ({ isDashboard = false }) => {
+
+  const [data, setdata] = useState([]);
+
+  useEffect( () => {
+    var mount = true;
+    if(mount === true)
+    { 
+        const config = {     
+          method: 'GET',
+        }
+        fetch(`${server}/bar/getbar`,config)
+        .then(res => res.json())
+        .then(data => {
+          setdata(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    return () => {mount = false};
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 

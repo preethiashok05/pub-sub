@@ -1,17 +1,42 @@
 import { Box } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
-import { mockDataContacts } from "../../data/mockData";
+import { server } from '../../utils/apiRoutes';
+//import { data } from "../../data/mockData";
+import React , { useState , useEffect} from 'react';
 import Header from "../../components/Header";
 import { useTheme } from "@mui/material";
 
+
+
 const Contacts = () => {
+
+  const [data, setdata] = useState([]);
+
+  useEffect( () => {
+    var mount = true;
+    if(mount === true)
+    { 
+        const config = {     
+          method: 'GET',
+        }
+        fetch(`${server}/user/getusers`,config)
+        .then(res => res.json())
+        .then(data => {
+          setdata(data);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+    return () => {mount = false};
+  }, []);
+
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const columns = [
     { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "registrarId", headerName: "Registrar ID" },
     {
       field: "name",
       headerName: "Name",
@@ -91,7 +116,8 @@ const Contacts = () => {
         }}
       >
         <DataGrid
-          rows={mockDataContacts}
+          getRowId={(row) => row._id}
+          rows={data}
           columns={columns}
           components={{ Toolbar: GridToolbar }}
         />
