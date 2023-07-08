@@ -1,11 +1,3 @@
-# Project Name
-
-React Admin Dashboard
-
-## Description
-
-A brief description of the project.
-
 ## Frontend Installation
 
 1. Clone the repository:
